@@ -9,9 +9,14 @@ const Part = ({name, numberOfExercises}) => {
 }
 
 const Content = ({parts}) => {
+  const totalOfExercises = parts.reduce((prevPart, currentPart) => {
+    return prevPart + currentPart.exercises
+  }, 0)
+
   return (
     <div> 
       {parts.map(part => <Part name={part.name} numberOfExercises={part.exercises}/>)}
+      <p> total of {totalOfExercises} exercises </p>
     </div>
   )
 }
