@@ -3,23 +3,30 @@ import React, { useState } from 'react'
 const Contacts = ({persons}) => {
   return(
     <div>
-      {persons.map(person => <p key={person.name}> {person.name} </p>)}
+      {persons.map(person => <p key={person.name}> {person.name} {person.phoneNumb} </p>)}
     </div>
   )
 }
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas', phoneNumb: '706881177' }
   ]) 
   const [ newName, setNewName ] = useState('')
+  const [newPhoneNumb, setNewPhoneNumb ] = useState('')
 
-  const addName = (event) => {
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+  }
+
+  const addContact = (event) => {
     event.preventDefault()
     if(persons.find(person => person.name === newName) === undefined)
     {
       const nameObject = {
-        name: newName
+        name: newName,
+        phoneNumb: newPhoneNumb
       }
   
       console.log("obj that's adde to the persons state", nameObject)
@@ -32,28 +39,31 @@ const App = () => {
     }
 
     setNewName("")
+    setNewPhoneNumb("")
   }
 
-  const handleNameChange = (event) => {
+  const handlePhoneNumbChange = (event) => {
     console.log(event.target.value)
-    setNewName(event.target.value)
+    setNewPhoneNumb(event.target.value)
   }
+
+  // const addPhoneNumb = (event) => {
+  //   event.preventDefault()
+  // }
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
+      <form onSubmit={addContact}>
+        <div>name: <input value={newName} onChange={handleNameChange}/></div>
+        <div>number: <input value={newPhoneNumb} onChange={handlePhoneNumbChange}/></div>
+        <div> <button type="submit">add</button> </div>
       </form>
+
       <h2>Numbers</h2>
       <Contacts persons={persons}/>
 
-      <div>debug: {newName} </div>,
+      <div>debug: {newName} {newPhoneNumb} </div>,
       {console.log(persons)}
     </div>
   )
