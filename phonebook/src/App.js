@@ -16,12 +16,21 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault()
-    const nameObject = {
-      name: newName
+    if(persons.find(person => person.name === newName) === undefined)
+    {
+      const nameObject = {
+        name: newName
+      }
+  
+      console.log("obj that's adde to the persons state", nameObject)
+      setPersons(persons.concat(nameObject))
+      // setNewName("")
+    }
+    else
+    {
+      alert(`${newName} is already added to the phonebook`)
     }
 
-    console.log("obj that's adde to the persons state", nameObject)
-    setPersons(persons.concat(nameObject))
     setNewName("")
   }
 
