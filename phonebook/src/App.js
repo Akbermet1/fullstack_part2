@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const PersonForm = ({handleSubmit, input1_info, input2_info, button_info}) => {
 
@@ -38,13 +39,23 @@ const Contacts = ({persons}) => {
 }
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', phoneNumb: '706881177' }
-  ]) 
-
-  const [ newName, setNewName ] = useState('')
+  const [ persons, setPersons ] = useState([]) 
+  const [newName, setNewName ] = useState('')
   const [newPhoneNumb, setNewPhoneNumb ] = useState('')
   const [filterPattern, setFilterPattern ] = useState('')
+
+
+  useEffect(() => {
+    console.log('effect')
+  
+    const eventHandler = response => {
+      console.log('promise fulfilled', response.data)
+      setPersons(response.data) 
+    }
+  
+    const promise = axios.get('http://localhost:3001/persons')
+    promise.then(eventHandler)
+  }, [])
 
   const handleNameChange = (event) => {
     console.log(event.target.value)
@@ -53,14 +64,18 @@ const App = () => {
 
   const addContact = (event) => {
     event.preventDefault()
+
+    let contact_counter = 1
     if(persons.find(person => person.name === newName) === undefined)
     {
       const nameObject = {
         name: newName,
-        phoneNumb: newPhoneNumb
+        phoneNumb: newPhoneNumb,
+        id: contact_counter
       }
-  
-      console.log("obj that's adde to the persons state", nameObject)
+      
+      contact_counter += 1
+      console.log("obj that's added to the persons state", nameObject)
       setPersons(persons.concat(nameObject))
     }
     else
