@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Countries = ({country_list}) => {
-  let totalOfMatches = country_list.length
-  console.log("totalOfMatches:", totalOfMatches)
-
-  if(totalOfMatches === 1)
-  {
-    const country = country_list[0]
-    return(
-      <div> 
+const Country = ({country}) => {
+  console.log("in Country")
+  return(
+    <div> 
         <h1> {country.name.common} </h1>
         <p>capital: {country.capital} </p>
         <p>population: {country.population} </p>
@@ -20,7 +15,19 @@ const Countries = ({country_list}) => {
         </or>
         <br />
         <img src={country.flags.png} alt={`the flag of ${country.name.common}`}/>
-      </div>
+    </div>
+  )
+}
+
+const Countries = ({country_list, handleShow}) => {
+  let totalOfMatches = country_list.length
+  console.log("totalOfMatches:", totalOfMatches)
+
+  if(totalOfMatches === 1)
+  {
+    const country = country_list[0]
+    return(
+      <Country country={country}/>
     )
   }
 
@@ -28,7 +35,14 @@ const Countries = ({country_list}) => {
   {
     return(
       <div>
-        {country_list.map(country => <p> {country.name.common} </p>)}
+        {country_list.map(country => {
+          return(
+            <div>
+              <span> {country.name.common} </span>
+              <button onClick={() => (handleShow(country.name.common))}> show </button>
+            </div>
+          )
+        })}
       </div>
     )
   }
@@ -50,6 +64,11 @@ const App = () => {
 
   const findCountries = (event) => {
     event.preventDefault()
+  }
+
+  const handleButtonShow = (country_name) => {
+    console.log("in the handleButtonShow")
+    setCountry(country_name)
   }
 
   useEffect(() => {
@@ -74,7 +93,7 @@ const App = () => {
         <div> find countries <input value={country} onChange={handleCountryChange}/> </div>
       </form>
 
-      <Countries country_list={matchedCountries}/>
+      <Countries country_list={matchedCountries} handleShow={handleButtonShow}/>
     </div>
   )
 }
